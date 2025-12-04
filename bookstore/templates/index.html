@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<main>
+    {% if term is defined %}
+        <div id="catRight">
+            <h1>Search results for "{{ term }}"</h1>
+
+            {% if books %}
+                {% for book in books %}
+                <div class="book">
+                    <div>
+                        <img 
+                            src="{{ url_for('static', filename='images/books/' + book[6]) }}"
+                            alt="{{ book[2] }}"
+                            width="140"
+                        />
+                    </div>
+
+                    <div class="bookDetailBox">
+                        <div class="bookTitle">{{ book[2] }}</div>
+                        <div class="bookDetail">Author: {{ book[3] }}</div>
+                        <div class="bookDetail">ISBN: {{ book[4] }}</div>
+                        <div class="bookPrice">Price: ${{ '%.2f'|format(book[5]) }}</div>
+
+                        {% if book[7] == 1 %}
+                        <a class="actionButton" href="#">Read Now</a>
+                        {% else %}
+                        <a class="actionButton" href="#">Add to Cart</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p id="notFoundMessage">No books found for "{{ term }}".</p>
+            {% endif %}
+        </div>
+
+    {% else %}
+        <div id="mainLeft">
+            <h1 class="welcomeText">Welcome to Black Cat Novel House!</h1>
+            <p class="welcomeText">If you love novels, this is the perfect place for you.</p>
+            <img src="{{ url_for('static', filename='images/misc/sleeping cat.png') }}"
+                alt="Sleeping Cat"
+                style="width: 90%; border-radius: 10px; margin: 20px 0;">
+        </div>
+
+        <div id="mainRight">
+            <h1>Shop by category:</h1>
+            <div id="categorySelections">
+                {% for category in categories %}
+                <div class="category">
+                    <p>
+                        <a href="{{ url_for('category', categoryId=category[0]) }}">{{ category[1] }}</a>
+                    </p>
+
+                    <a href="{{ url_for('category', categoryId=category[0]) }}">
+                        <img 
+                            src="{{ url_for('static',
+                                filename='images/categories/' + category[1]|lower + '.png') }}"
+                            alt="{{ category[1] }}"
+                            width="175"
+                        />
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+</main>
+{% endblock %}
+
+
